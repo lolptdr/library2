@@ -166,7 +166,7 @@ describe Library do
     expect(book).to be_nil
   end
 
-  xit "returns available books" do
+  it "returns available books" do
     lib = Library.new
     lib.register_new_book("Eloquent JavaScript", "Marijn Haverbeke")
     lib.register_new_book("Essential JavaScript Design Patterns", "Addy Osmani")
@@ -210,7 +210,8 @@ describe Library do
     expect(lib.borrowed_books.count).to eq(0)
 
     kors = Borrower.new("Michael Kors")
-    book = lib.check_out_book(lib.borrowed_books.first.id, kors)
+    # binding.pry
+    book = lib.check_out_book(lib.books.first.id, kors)
 
     # But now there should be one checked out book
     expect(lib.borrowed_books.count).to eq(1)

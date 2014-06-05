@@ -17,7 +17,7 @@ class Book
     end
   end
   def check_in
-    if @status = 'checked_out'
+    if @status == 'checked_out'
       @status = 'available'
     end
   end
@@ -80,18 +80,17 @@ class Library
   end
 
   def available_books
-    count_avail = 0
-    @books.each do |b|
-      if b.status == 'available'
-        count_avail += 1
+    @books.select { |book|
+      if book.status == 'available'
+        book
       end
-    end
+    }
   end
 
   def borrowed_books
     @books.select { |book| 
       if book.status == 'checked_out'
-        return book
+        book
       end
     }
   end
