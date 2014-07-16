@@ -85,7 +85,7 @@ describe Library do
     # Sam wants to check out Green Eggs and Ham
     sam = Borrower.new('Sam-I-am')
     book = lib.check_out_book(book_id, sam)
-binding.pry
+
     # The checkout should return the book
     expect(book).to be_a(Book)
     expect(book.title).to eq "Green Eggs and Ham"
@@ -94,7 +94,7 @@ binding.pry
     expect(book.status).to eq 'checked_out'
   end
 
-  xit "knows who borrowed a book" do
+  it "knows who borrowed a book" do
     lib = Library.new
     lib.register_new_book("The Brothers Karamazov", "Fyodor Dostoesvky")
     book_id = lib.books.first.id
@@ -107,9 +107,11 @@ binding.pry
     expect( lib.get_borrower(book_id) ).to eq 'Big Brother'
   end
 
-  xit "does not allow a book to be checked out twice in a row" do
+  it "does not allow a book to be checked out twice in a row" do
     lib = Library.new
-    lib.register_new_book = Book.new("Surely You're Joking Mr. Feynman", "Richard Feynman")
+    # Not sure how to handle non-instantiated objects outside of the code:
+    # lib.register_new_book = Book.new("Surely You're Joking Mr. Feynman", "Richard Feynman")
+    lib.register_new_book("Surely You're Joking Mr. Feynman", "Richard Feynman")
     book_id = lib.books.first.id
 
     # Leslie Nielsen wants to double check on that
@@ -128,7 +130,7 @@ binding.pry
     expect(book_again).to be_nil
   end
 
-  xit "allows a Borrower to check a book back in" do
+  it "allows a Borrower to check a book back in" do
     lib = Library.new
     lib.register_new_book("Finnegans Wake", "James Joyce")
     book_id = lib.books.first.id
@@ -144,7 +146,7 @@ binding.pry
     expect(book.status).to eq 'available'
   end
 
-  xit "does not allow a Borrower to check out more than one Book at any given time" do
+  it "does not allow a Borrower to check out more than one Book at any given time" do
     # yeah it's a stingy library
     lib = Library.new
     lib.register_new_book("Eloquent JavaScript", "Marijn Haverbeke")

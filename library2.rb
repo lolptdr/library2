@@ -35,11 +35,12 @@ class Borrower
 end
 
 class Library
-  attr_reader :books
+  attr_reader :books, :borrower
 
   def initialize(name="APL")
     @name = name
     @books = []
+    @borrowed_books = {}
   end
 
   def register_new_book(title, author)
@@ -52,13 +53,24 @@ class Library
   end
 
   def check_out_book(book_id, borrower)
-    if @books.detect{ |x| x == book_id } != nil
-      book.checkout
-    end
+    book = @books.find{ |x| x.id == book_id } 
 
+    if book.status == 'available'
+      book.check_out
+      @borrowed_books[book_id] = borrower
+      book
+    end
+    
+  end
+
+  def get_borrower(book_id)
+    @borrowed_books[book_id].name
   end
 
   def check_in_book(book)
+    if book.status == 'checked_out'
+      book.check_in
+    end
   end
 
   def available_books
