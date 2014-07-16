@@ -45,6 +45,9 @@ class Library
 
   def register_new_book(title, author)
     new_book = Book.new(title, author)
+
+    #create randomized ID, convert to string to allowed right-justification of 6 characters
+    #then convert back to integer
     new_book.id = rand(6**6).to_s.rjust(6,'0').to_i
     @books << new_book
   end
@@ -53,10 +56,16 @@ class Library
   end
 
   def check_out_book(book_id, borrower)
-    book = @books.find{ |x| x.id == book_id } 
+    check_out_count = 0
+    book = @books.find{ |x| x.id == book_id }
+    
+    if check_out_count > 3
+      return nil
+    end
 
     if book.status == 'available'
       book.check_out
+      check_out_count += 1
       @borrowed_books[book_id] = borrower
       book
     end
@@ -74,8 +83,10 @@ class Library
   end
 
   def available_books
+    @books.select{ |x| x.status == 'available'}
   end
 
   def borrowed_books
+    @books.select{ |x| x.status == 'checked_out'}
   end
 end
