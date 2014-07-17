@@ -11,17 +11,17 @@ class Book
   def check_out
     if @status == 'available'
       @status = 'checked_out'
-      return true
+      true
     else
-      return false
+      false
     end
   end
   def check_in
     if @status == 'checked_out'
       @status = 'available'
-      return true
+      true
     else
-      return false
+      false
     end
   end
 end
@@ -85,7 +85,7 @@ class Library
   end
 
   def available_books
-    @books.select{ |x| x.status == 'available'}
+    @books.select{ |x| x.status == 'available'} # ".select" alias ".find_all"
   end
 
   def borrowed_books
