@@ -27,7 +27,8 @@ class Book
 end
 
 class Borrower
-  attr_reader :books, :name, :title, :author
+  attr_reader :books, :title, :author
+  attr_accessor :name
 
   def initialize(name)
     @name = name
@@ -35,20 +36,26 @@ class Borrower
 end
 
 class Library
-  attr_reader :books, :borrower
+  attr_reader :books, :borrower, :borrowed_books, :borrower_book_count
 
   def initialize(name="APL")
     @name = name
     @books = []
     @borrowed_books = {}
+    @borrower_book_count = Hash.new { |hash, key| hash[key] = 0 }
+    # For more info on the line above, see third method on most voted answer:
+    # http://stackoverflow.com/questions/2990812/initializing-hashes
   end
 
   def register_new_book(title, author)
     new_book = Book.new(title, author)
 
-    #create randomized ID, convert to string to allowed right-justification of 6 characters
-    #then convert back to integer
-    new_book.id = rand(6**6).to_s.rjust(6,'0').to_i
+    # create randomized ID, convert to string to allowed right-justification of 6 characters
+    # then convert back to integer but dupes may occur...
+    # new_book.id = rand(6**6).to_s.rjust(6,'0').to_i
+    # Can also use "object.id" method
+
+    new_book.id = rand(10000) + Time.now.to_i
     @books << new_book
   end
 
@@ -56,18 +63,15 @@ class Library
   end
 
   def check_out_book(book_id, borrower)
-    check_out_count = 0
     book = @books.find{ |x| x.id == book_id }
+    @borrower_book_count[borrower] += 1
     
-    if check_out_count > 3
-      return nil
-    end
-
-    if book.status == 'available'
+    if book.status == 'available' and @borrower_book_count[borrower] < 3
       book.check_out
-      check_out_count += 1
       @borrowed_books[book_id] = borrower
       book
+    else
+      nil
     end
     
   end
