@@ -69,8 +69,7 @@ class Library
       book.check_out
       @borrowed_books[book_id] = borrower
       book
-    end
-    
+    end    
   end
 
   def get_borrower(book_id)
